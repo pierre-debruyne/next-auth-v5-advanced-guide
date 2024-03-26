@@ -2,7 +2,6 @@
 datasource db {
   provider  = "postgresql"
   url  	    = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -23,6 +22,7 @@ model User {
   password      String?
   role          UserRole @default(USER)
   accounts      Account[]
+  entreprises          UserEntreprise[]
   isTwoFactorEnabled Boolean @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 }
@@ -80,4 +80,32 @@ model TwoFactorConfirmation {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+
+enum EntrepriseType {
+  SIEGE
+  FILLIALE
+}
+
+model Entreprises {
+  id            String    @id @default(cuid()) @unique
+  name          String?
+  type          EntrepriseType @default(SIEGE)
+  statut        String
+  adresse       String
+  pays          String
+  nbEmployes    Int?
+  secteur       Int?
+  users         UserEntreprise[]
+}
+
+model UserEntreprise {
+  id          String    @id @default(cuid())
+  userId      String
+  entrepriseId String
+  user        User      @relation(fields: [userId], references: [id])
+  entreprise  Entreprises @relation(fields: [entrepriseId], references: [id])
+
+  @@unique([userId, entrepriseId])
 }
