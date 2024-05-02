@@ -14,17 +14,18 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          UserRole @default(USER)
-  accounts      Account[]
+  id                   String    @id @default(cuid())
+  name                 String?
+  email                String?   @unique
+  emailVerified        DateTime?
+  image                String?
+  password             String?
+  role                 UserRole @default(USER)
+  accounts             Account[]
   entreprises          UserEntreprise[]
   isTwoFactorEnabled Boolean @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  projets        Projet[]  @relation("UserProjects")
 }
 
 model Account {
@@ -84,9 +85,19 @@ model TwoFactorConfirmation {
 
 
 enum EntrepriseType {
+  HOLDING
   SIEGE
   FILLIALE
+  SUCURSALE
 }
+
+model Projet {
+  id            String    @id @default(cuid()) @unique
+  name          String?
+  annee         String
+  users          User[]    @relation("UserProjects")
+}
+
 
 model Entreprises {
   id            String    @id @default(cuid()) @unique

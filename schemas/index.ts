@@ -87,3 +87,8 @@ export const EntrepriseAddSchema = z.object({
 
   //secteur: z.string().min(1, { message: "Veuillez indiquer le secteur d'activité de l'entreprise" }),
 });
+
+export const ProjetAddSchema = z.object({
+  // valider un champ année sur 4 chiffres
+  annee: z.string().min(4, { message: "Veuillez indiquer l'année fiscale sur 4 chiffres" }),
+});

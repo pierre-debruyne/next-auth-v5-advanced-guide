@@ -4,22 +4,26 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import TeamSwitcher from "../_components/team-switcher";
-import { MainNav } from "../_components/main-nav";
-import { Search } from "../_components/search";
-import { UserNav } from "../_components/user-nav";
 import { CalendarDateRangePicker } from "../_components/date-range-picker";
 import { Overview } from "../_components/overview";
 import { RecentSales } from "../_components/recent-sales";
 import { FaBriefcase } from "react-icons/fa";
 import ListeEntreprise from "../_components/dashboard/liste-entreprise";
+import { getAllProjects } from "@/actions/projects/project";
+import AddProjet from "../_components/dashboard/add-projet";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Dashboard - CSRD AI",
 };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  // server action pour verifiier qu'un projet est en cours
+  const checkProjet = await getAllProjects();
+  if (!checkProjet || checkProjet.length === 0) {
+    return <AddProjet />;
+  }
+
   return (
     <>
       <div className='md:hidden'>
@@ -39,13 +43,17 @@ export default function DashboardPage() {
           <Tabs defaultValue='entreprises' className='space-y-4'>
             <TabsList>
               <TabsTrigger value='entreprises'>Entreprises / filliales</TabsTrigger>
-              <TabsTrigger value='equipes'>Équipes</TabsTrigger>
+              <TabsTrigger value='chaine_de_valeurs'>Chaine de valeurs</TabsTrigger>
+              <TabsTrigger value='parties_prenantes'>Parties prenantes</TabsTrigger>
+              <TabsTrigger value='double_materialite'>Double matérialité</TabsTrigger>
+
               <TabsTrigger value='raports' disabled>
                 Rapport
               </TabsTrigger>
               <TabsTrigger value='notifications' disabled>
                 Notifications
               </TabsTrigger>
+              <TabsTrigger value='equipes'>Pilotage</TabsTrigger>
             </TabsList>
             <TabsContent value='entreprises' className='space-y-4'>
               <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
@@ -57,7 +65,11 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className='text-2xl font-bold'>Entreprise XXX</div>
-                    <p className='text-xs text-muted-foreground'>137 employés </p>
+                    <div className='flex gap-3'>
+                      <p className='text-xs text-muted-foreground'>CA 2.4M </p>
+                      <p className='text-xs text-muted-foreground'>BILAN 2.4M </p>
+                      <p className='text-xs text-muted-foreground'>EFFECTIF 134 </p>
+                    </div>
                   </CardContent>
                 </Card>
                 <Card>

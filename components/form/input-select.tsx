@@ -1,3 +1,4 @@
+import { EntrepriseType } from "@prisma/client";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 

@@ -60,24 +60,24 @@ const AddEntreprise = () => {
         <DialogTrigger asChild>
           <Card className='cursor-pointer'>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-lg font-medium'>Créer une entreprise</CardTitle>
+              <CardTitle className='text-lg font-medium'>Ajouter une entreprise</CardTitle>
               <FaPlusCircle className='h-4 w-4 text-muted-foreground text-green-600' />
             </CardHeader>
             <CardContent>
-              <p className='text-xs'>Cliquez ici pour ajouter une nouvelle entreprise.</p>
+              <p className='text-xs'>Cliquez ici pour renseigner une nouvelle entreprise.</p>
             </CardContent>
           </Card>
         </DialogTrigger>
         <DialogContent className='w-full max-w-fit'>
           <DialogHeader>
             <DialogTitle>Ajouter une entreprise</DialogTitle>
-            <DialogDescription>Veuillez rentrer les informations de votre entreprise ou filliale .</DialogDescription>
+            <DialogDescription>Veuillez rentrer les informations de chaque entreprises à intégré dans le périmetre consolidé.</DialogDescription>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
               <div className=' grid grid-cols-2 gap-3'>
-                <InputText name='name' label="Nom de l'entreprise" form={form} isPending={isPending} placeholder='Entreprise XYZ' />
-                <InputText name='statut' label='Statut juridique' form={form} isPending={isPending} placeholder='SAS, SARL, ...' />
+                <InputText name='name' label="Nom de l'entreprise" form={form} isPending={isPending} placeholder='Entreprise XYZ' type='text' />
+                <InputText name='statut' label='Statut juridique' form={form} isPending={isPending} placeholder='SAS, SARL, ...' type='text' />
                 <FormField
                   control={form.control}
                   name='type'
