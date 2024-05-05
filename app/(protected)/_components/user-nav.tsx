@@ -11,15 +11,24 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { currentUser } from "@/lib/auth";
 
-export function UserNav() {
+export async function UserNav() {
+  const user = await currentUser();
+  console.log(user);
+
+  if (!user) {
+    return null;
+  }
+  let initials = extractInitials(user.name);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
             <AvatarImage src='/avatars/01.png' alt='@shadcn' />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -54,4 +63,9 @@ export function UserNav() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
+}
+
+function extractInitials(name) {
+  const parts = name.split(" ");
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }

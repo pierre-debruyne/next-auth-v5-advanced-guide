@@ -8,7 +8,7 @@ interface InputSelectProps {
   label: string;
   isPending: boolean;
   placeholder: string;
-  tab: Array<any> | Object;
+  tab: any;
 }
 
 export const InputSelect = ({ form, name, label, isPending, placeholder, tab }: InputSelectProps) => {
@@ -18,23 +18,28 @@ export const InputSelect = ({ form, name, label, isPending, placeholder, tab }: 
     <FormField
       control={form.control}
       name={name}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <Select disabled={isPending} onValueChange={field.onChange} defaultValue={field.value}>
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder={placeholder} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              <SelectItem value={EntrepriseType.SIEGE}>Siège</SelectItem>
-              <SelectItem value={EntrepriseType.FILLIALE}>Filliale</SelectItem>
-            </SelectContent>
-          </Select>
-          <FormMessage />
-        </FormItem>
-      )}
+      render={({ field }) => {
+        return (
+          <FormItem>
+            {label && <FormLabel>{label}</FormLabel>}
+            <Select disabled={isPending} onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder={placeholder} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {tab.map((item: any) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 };

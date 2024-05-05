@@ -1,16 +1,12 @@
 import { Metadata } from "next";
 import Image from "next/image";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarDateRangePicker } from "../_components/date-range-picker";
-import { Overview } from "../_components/overview";
-import { RecentSales } from "../_components/recent-sales";
-import { FaBriefcase } from "react-icons/fa";
-import ListeEntreprise from "../_components/dashboard/liste-entreprise";
-import { getAllProjects } from "@/actions/projects/project";
 import AddProjet from "../_components/dashboard/add-projet";
+import { ProjectManager } from "../_components/global/project-manager";
+import { getProjectsByUserId } from "@/data/projects/projects";
+import { currentUser } from "@/lib/auth";
+import { getEntrepriseByUserId } from "@/data/entreprises/entreprises";
+import AddFirstEntreprise from "../_components/dashboard/add-first-entreprise";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -18,10 +14,19 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  // server action pour verifiier qu'un projet est en cours
-  const checkProjet = await getAllProjects();
+  // recuperation de l'utilisateur
+  const user = await currentUser();
+
+  // Verification qu'un projet est en cours
+  const checkProjet = await getProjectsByUserId(user.id);
   if (!checkProjet || checkProjet.length === 0) {
     return <AddProjet />;
+  }
+
+  // Verification qu'une entreprise est créée
+  const checkEntreprise = await getEntrepriseByUserId(user.id);
+  if (!checkEntreprise || checkEntreprise.length === 0) {
+    return <AddFirstEntreprise />;
   }
 
   return (
@@ -36,11 +41,10 @@ export default async function DashboardPage() {
           <div className='flex items-center justify-between space-y-2'>
             <h2 className='text-3xl font-bold tracking-tight'>Dashboard</h2>
             <div className='flex items-center space-x-2'>
-              <CalendarDateRangePicker />
-              <Button>Download</Button>
+              <ProjectManager />
             </div>
           </div>
-          <Tabs defaultValue='entreprises' className='space-y-4'>
+          {/* <Tabs defaultValue='entreprises' className='space-y-4'>
             <TabsList>
               <TabsTrigger value='entreprises'>Entreprises / filliales</TabsTrigger>
               <TabsTrigger value='chaine_de_valeurs'>Chaine de valeurs</TabsTrigger>
@@ -93,25 +97,6 @@ export default async function DashboardPage() {
                   </CardContent>
                 </Card>
               </div>
-              {/* <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'>
-                <Card className='col-span-4'>
-                  <CardHeader>
-                    <CardTitle>Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent className='pl-2'>
-                    <Overview />
-                  </CardContent>
-                </Card>
-                <Card className='col-span-3'>
-                  <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
-                    <CardDescription>You made 265 sales this month.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <RecentSales />
-                  </CardContent>
-                </Card>
-              </div> */}
             </TabsContent>
             <TabsContent value='equipes' className='space-y-4'>
               <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
@@ -223,7 +208,7 @@ export default async function DashboardPage() {
                 </Card>
               </div>
             </TabsContent>
-          </Tabs>
+          </Tabs> */}
         </div>
       </div>
     </>

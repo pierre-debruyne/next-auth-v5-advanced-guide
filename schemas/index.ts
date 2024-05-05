@@ -74,21 +74,64 @@ export const RegisterSchema = z.object({
 export const EntrepriseAddSchema = z.object({
   name: z.string().min(1, { message: "Veuillez indiquer le nom de l'entreprise" }),
   type: z.enum([EntrepriseType?.SIEGE, EntrepriseType?.FILLIALE]),
-  statut: z.string().min(1, { message: "Veuillez indiquer le statut juridique de l'entreprise" }),
-  pays: z.string().min(1, { message: "Veuillez indiquer le pays de l'entreprise" }),
-  nbEmployes: z.number({
-    required_error: "Veuillez indiquer le nombre d'employés",
-    invalid_type_error: "Veuillez indiquer le nombre d'employés",
-  }),
-  secteur: z.number({
-    required_error: "Veuillez indiquer le secteur d'activité de l'entreprise",
-    invalid_type_error: "Veuillez indiquer le secteur d'activité de l'entreprise",
-  }),
-
-  //secteur: z.string().min(1, { message: "Veuillez indiquer le secteur d'activité de l'entreprise" }),
+  statut: z.string().min(1, { message: "Veuillez indiquer le statut juridique" }),
+  pays: z.string().min(1, { message: "Veuillez indiquer le pays" }),
+  principale: z.optional(z.number()),
+  secteur: z.preprocess(
+    (a) => Number(a),
+    z.number({
+      required_error: "Veuillez indiquer le secteur d'activité",
+      invalid_type_error: "Veuillez indiquer le secteur d'activité",
+    })
+  ),
+});
+export const EntrepriseAddFirstSchema = z.object({
+  name: z.string().min(1, { message: "Veuillez indiquer le nom de l'entreprise" }),
+  type: z.enum([EntrepriseType?.SIEGE, EntrepriseType?.FILLIALE]),
+  statut: z.string().min(1, { message: "Veuillez indiquer le statut juridique" }),
+  pays: z.string().min(1, { message: "Veuillez indiquer le pays" }),
+  principale: z.optional(z.number()),
+  nbEmployes: z.preprocess(
+    (a) => Number(a),
+    z.number({
+      required_error: "Veuillez indiquer le nombre de salariés ETP",
+      invalid_type_error: "Veuillez indiquer le nombre de salariés ETP",
+    })
+  ),
+  chiffreAff: z.preprocess(
+    (a) => Number(a),
+    z.number({
+      required_error: "Veuillez indiquer le chiffre d'affaire",
+      invalid_type_error: "Veuillez indiquer le chiffre d'affaire",
+    })
+  ),
+  benefice: z.preprocess(
+    (a) => Number(a),
+    z.number({
+      required_error: "Veuillez indiquer le bénéfice",
+      invalid_type_error: "Veuillez indiquer le bénéfice",
+    })
+  ),
+  secteur: z.preprocess(
+    (a) => Number(a),
+    z.number({
+      required_error: "Veuillez indiquer le secteur d'activité",
+      invalid_type_error: "Veuillez indiquer le secteur d'activité",
+    })
+  ),
 });
 
 export const ProjetAddSchema = z.object({
-  // valider un champ année sur 4 chiffres
+  debut: z.date({
+    required_error: "Please select a date and time",
+    invalid_type_error: "That's not a date!",
+  }),
+  fin: z.date({
+    required_error: "Please select a date and time",
+    invalid_type_error: "That's not a date!",
+  }),
   annee: z.string().min(4, { message: "Veuillez indiquer l'année fiscale sur 4 chiffres" }),
+});
+export const ProjetChangeSchema = z.object({
+  id: z.string(),
 });

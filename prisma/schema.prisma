@@ -1,7 +1,7 @@
 // prisma/schema.prisma
 datasource db {
-  provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -14,33 +14,34 @@ enum UserRole {
 }
 
 model User {
-  id                   String    @id @default(cuid())
-  name                 String?
-  email                String?   @unique
-  emailVerified        DateTime?
-  image                String?
-  password             String?
-  role                 UserRole @default(USER)
-  accounts             Account[]
-  entreprises          UserEntreprise[]
-  isTwoFactorEnabled Boolean @default(false)
+  id                    String                 @id @default(cuid())
+  name                  String?
+  email                 String?                @unique
+  emailVerified         DateTime?
+  image                 String?
+  password              String?
+  role                  UserRole               @default(USER)
+  accounts              Account[]
+  entreprises           UserEntreprise[]
+  isTwoFactorEnabled    Boolean                @default(false)
+  idProject             String?
   twoFactorConfirmation TwoFactorConfirmation?
-  projets        Projet[]  @relation("UserProjects")
+  projets               Projet[]               @relation("UserProjects")
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -48,27 +49,27 @@ model Account {
 }
 
 model VerificationToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
   expires DateTime
 
   @@unique([email, token])
 }
 
 model PasswordResetToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
   expires DateTime
 
   @@unique([email, token])
 }
 
 model TwoFactorToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
   expires DateTime
 
   @@unique([email, token])
@@ -78,45 +79,58 @@ model TwoFactorConfirmation {
   id String @id @default(cuid())
 
   userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
 }
 
-
 enum EntrepriseType {
-  HOLDING
   SIEGE
+  HOLDING
   FILLIALE
   SUCURSALE
+  AUTRE_SOCIETE
 }
 
 model Projet {
-  id            String    @id @default(cuid()) @unique
-  name          String?
-  annee         String
-  users          User[]    @relation("UserProjects")
+  id      String              @id @unique @default(cuid())
+  debut   DateTime
+  fin     DateTime
+  annee   String
+  users   User[]              @relation("UserProjects")
+  details EntrepriseDetails[]
 }
 
-
 model Entreprises {
-  id            String    @id @default(cuid()) @unique
-  name          String?
-  type          EntrepriseType @default(SIEGE)
-  statut        String
-  adresse       String
-  pays          String
-  nbEmployes    Int?
-  secteur       Int?
-  users         UserEntreprise[]
+  id         String              @id @unique @default(cuid())
+  name       String?
+  type       EntrepriseType      @default(SIEGE)
+  statut     String
+  adresse    String
+  pays       String
+  secteur    Int?
+  principale Boolean             @default(false)
+  users      UserEntreprise[]
+  details    EntrepriseDetails[]
+}
+
+model EntrepriseDetails {
+  id           String      @id @unique @default(cuid())
+  nbEmployes   Int?
+  chiffreAff   Int?
+  benefice     Int?
+  entrepriseId String
+  entreprise   Entreprises @relation(fields: [entrepriseId], references: [id])
+  projetId     String?
+  projet       Projet?     @relation(fields: [projetId], references: [id])
 }
 
 model UserEntreprise {
-  id          String    @id @default(cuid())
-  userId      String
+  id           String      @id @default(cuid())
+  userId       String
   entrepriseId String
-  user        User      @relation(fields: [userId], references: [id])
-  entreprise  Entreprises @relation(fields: [entrepriseId], references: [id])
+  user         User        @relation(fields: [userId], references: [id])
+  entreprise   Entreprises @relation(fields: [entrepriseId], references: [id])
 
   @@unique([userId, entrepriseId])
 }
