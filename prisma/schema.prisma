@@ -106,9 +106,8 @@ model Entreprises {
   name       String?
   type       EntrepriseType      @default(SIEGE)
   statut     String
-  adresse    String
   pays       String
-  secteur    Int?
+  secteur    String
   principale Boolean             @default(false)
   users      UserEntreprise[]
   details    EntrepriseDetails[]

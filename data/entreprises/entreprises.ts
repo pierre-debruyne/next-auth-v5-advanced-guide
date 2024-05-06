@@ -3,7 +3,6 @@ import { db } from "@/lib/db";
 export const getEntrepriseById = async (id: string) => {
   try {
     const result = await db.entreprises.findUnique({ where: { id } });
-
     return result;
   } catch {
     return null;

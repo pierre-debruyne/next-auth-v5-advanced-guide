@@ -72,18 +72,13 @@ export const RegisterSchema = z.object({
 });
 
 export const EntrepriseAddSchema = z.object({
+  id: z.optional(z.string()),
   name: z.string().min(1, { message: "Veuillez indiquer le nom de l'entreprise" }),
-  type: z.enum([EntrepriseType?.SIEGE, EntrepriseType?.FILLIALE]),
+  type: z.enum([EntrepriseType?.SIEGE, EntrepriseType?.FILLIALE, EntrepriseType?.HOLDING, EntrepriseType?.SUCURSALE, EntrepriseType?.AUTRE_SOCIETE]),
   statut: z.string().min(1, { message: "Veuillez indiquer le statut juridique" }),
   pays: z.string().min(1, { message: "Veuillez indiquer le pays" }),
   principale: z.optional(z.number()),
-  secteur: z.preprocess(
-    (a) => Number(a),
-    z.number({
-      required_error: "Veuillez indiquer le secteur d'activité",
-      invalid_type_error: "Veuillez indiquer le secteur d'activité",
-    })
-  ),
+  secteur: z.string(),
 });
 export const EntrepriseAddFirstSchema = z.object({
   name: z.string().min(1, { message: "Veuillez indiquer le nom de l'entreprise" }),
@@ -112,13 +107,7 @@ export const EntrepriseAddFirstSchema = z.object({
       invalid_type_error: "Veuillez indiquer le bénéfice",
     })
   ),
-  secteur: z.preprocess(
-    (a) => Number(a),
-    z.number({
-      required_error: "Veuillez indiquer le secteur d'activité",
-      invalid_type_error: "Veuillez indiquer le secteur d'activité",
-    })
-  ),
+  secteur: z.string(),
 });
 
 export const ProjetAddSchema = z.object({

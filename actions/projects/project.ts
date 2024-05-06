@@ -57,7 +57,6 @@ export const addProjet = async (values: z.infer<typeof ProjetAddSchema>) => {
 
     return { success: "Projet créé, veuillez patienter..." };
   } catch (error) {
-    console.log(error);
     return { error: "Erreur lors de la création du projet" };
   }
 };

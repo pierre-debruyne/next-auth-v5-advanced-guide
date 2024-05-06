@@ -15,7 +15,6 @@ import { currentUser } from "@/lib/auth";
 
 export async function UserNav() {
   const user = await currentUser();
-  console.log(user);
 
   if (!user) {
     return null;

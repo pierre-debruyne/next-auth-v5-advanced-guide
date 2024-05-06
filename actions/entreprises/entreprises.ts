@@ -35,7 +35,6 @@ export const addFirstEntreprise = async (values: z.infer<typeof EntrepriseAddFir
         pays: pays,
         secteur: secteur,
         principale: principale ? true : false,
-        adresse: "",
       },
     });
 
@@ -98,7 +97,6 @@ export const addEntreprise = async (values: z.infer<typeof EntrepriseAddSchema>)
         pays: pays,
         secteur: secteur,
         principale: principale ? true : false,
-        adresse: "",
       },
     });
 
@@ -117,5 +115,56 @@ export const addEntreprise = async (values: z.infer<typeof EntrepriseAddSchema>)
   } catch (error) {
     console.log(error);
     return { error: "Erreur lors de la création de l'entreprise" };
+  }
+};
+export const updateEntreprise = async (values: z.infer<typeof EntrepriseAddSchema>) => {
+  const user = await currentUser();
+  const validatedFields = EntrepriseAddSchema.safeParse(values);
+
+  if (!user) {
+    return { error: "User not found!" };
+  }
+
+  if (!validatedFields.success) {
+    return { error: "Invalid fields!" };
+  }
+
+  const userExists = await db.user.findUnique({
+    where: { id: user.id },
+  });
+
+  if (!userExists) {
+    return { error: "User not found in database!" };
+  }
+
+  try {
+    const { name, type, statut, pays, secteur, principale, id } = validatedFields.data;
+    let updatedEntreprise = await db.entreprises.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: name,
+        type: type,
+        statut: statut,
+        pays: pays,
+        secteur: secteur,
+        principale: principale ? true : false,
+      },
+    });
+
+    return { success: "Entreprise modifiée !" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Erreur lors de la modification de l'entreprise" };
+  }
+};
+
+export const getEntrepriseById = async (id: string) => {
+  try {
+    const result = await db.entreprises.findUnique({ where: { id } });
+    return result;
+  } catch {
+    return null;
   }
 };
