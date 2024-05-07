@@ -26,3 +26,24 @@ export const getEntrepriseByUserId = async (userId: string) => {
     return null;
   }
 };
+
+// get entreprise et detail :
+export const getEntrepriseAndDetailByUserId = async (userId: string) => {
+  try {
+    const result = await db.userEntreprise.findMany({
+      where: { userId: userId },
+      include: {
+        entreprise: {
+          include: {
+            details: true,
+          },
+        },
+      },
+    });
+    const entreprisesUtilisateur = result.map((userEntreprise) => userEntreprise.entreprise);
+    return entreprisesUtilisateur;
+  } catch (e) {
+    console.log("erreur", e);
+    return null;
+  }
+};

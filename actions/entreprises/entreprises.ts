@@ -1,8 +1,8 @@
 "use server";
-import { unstable_update } from "@/auth";
+
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { EntrepriseAddFirstSchema, EntrepriseAddSchema } from "@/schemas";
+import { EntrepriseAddFirstSchema, EntrepriseAddSchema, EntrepriseUpdateDetailSchema } from "@/schemas";
 import * as z from "zod";
 
 export const addFirstEntreprise = async (values: z.infer<typeof EntrepriseAddFirstSchema>) => {
@@ -117,6 +117,7 @@ export const addEntreprise = async (values: z.infer<typeof EntrepriseAddSchema>)
     return { error: "Erreur lors de la création de l'entreprise" };
   }
 };
+
 export const updateEntreprise = async (values: z.infer<typeof EntrepriseAddSchema>) => {
   const user = await currentUser();
   const validatedFields = EntrepriseAddSchema.safeParse(values);
@@ -166,5 +167,45 @@ export const getEntrepriseById = async (id: string) => {
     return result;
   } catch {
     return null;
+  }
+};
+
+export const updateEntrepriseDetail = async (values: z.infer<typeof EntrepriseUpdateDetailSchema>) => {
+  const user = await currentUser();
+  const validatedFields = EntrepriseUpdateDetailSchema.safeParse(values);
+
+  if (!user) {
+    return { error: "User not found!" };
+  }
+
+  if (!validatedFields.success) {
+    return { error: "Invalid fields!" };
+  }
+
+  const userExists = await db.user.findUnique({
+    where: { id: user.id },
+  });
+
+  if (!userExists) {
+    return { error: "User not found in database!" };
+  }
+
+  try {
+    const { id, chiffreAff, nbEmployes, benefice } = validatedFields.data;
+
+    await db.entrepriseDetails.create({
+      data: {
+        entrepriseId: id,
+        chiffreAff: chiffreAff,
+        nbEmployes: nbEmployes,
+        benefice: benefice,
+        projetId: user.idProject,
+      },
+    });
+
+    return { success: "Entreprise créée, veuillez patienter..." };
+  } catch (error) {
+    console.log(error);
+    return { error: "Erreur lors de la création de l'entreprise" };
   }
 };

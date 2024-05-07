@@ -18,3 +18,76 @@ export const entrepriseType = [
   { value: "SUCURSALE", label: "Sucursale" },
   { value: "AUTRE_SOCIETE", label: "Autre société" },
 ];
+
+export const chainesDeValeursAmont = [
+  {
+    name: "Approvisionnement",
+    value: [
+      {
+        name: "Electricité",
+        value: "Electricité",
+      },
+      {
+        name: "Energies fossiles",
+        value: "Energies fossiles",
+      },
+      {
+        name: "Eau",
+        value: "Eau",
+      },
+      {
+        name: "Réseau de froid ou de chaud",
+        value: "Réseau de froid ou de chaud",
+      },
+      {
+        name: "Réseau internet et téléphonie",
+        value: "Réseau internet et téléphonie",
+      },
+      {
+        name: "Datacenter",
+        value: "Datacenter",
+      },
+      {
+        name: "Matières premières",
+        value: "Matières premières",
+      },
+      {
+        name: "Biens finis ou semi-finis",
+        value: "Biens finis ou semi-finis",
+      },
+      {
+        name: "Biens d’équipement",
+        value: "Biens d’équipement",
+      },
+      {
+        name: "Services financiers",
+        value: "Services financiers",
+      },
+      {
+        name: "Services autres que financiers",
+        value: "Services autres que financiers",
+      },
+    ],
+  },
+  {
+    name: "Transports de marchandises entrantes",
+    value: "Transports de marchandises entrantes",
+  },
+  {
+    name: "Déplacements",
+    value: [
+      {
+        name: "Voyages professionnels",
+        value: "Voyages professionnels",
+      },
+      {
+        name: "Déplacements domicile-travail des collaborateurs",
+        value: "Déplacements domicile-travail des collaborateurs",
+      },
+      {
+        name: "Déplacements de fournisseurs",
+        value: "Déplacements de fournisseurs",
+      },
+    ],
+  },
+];

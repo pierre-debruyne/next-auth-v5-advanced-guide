@@ -74,8 +74,8 @@ const AddFirstEntreprise = () => {
               <InputSelect name='pays' label='Pays' form={form} isPending={isPending} placeholder='Choisir un pays' tab={listePays} />
               <InputSelect name='secteur' label="Secteur d'activité" form={form} isPending={isPending} placeholder="Choisir un secteur d'activité" tab={listeSecteur} />
               <InputText name='nbEmployes' label='Nombre de salariés ETP' form={form} isPending={isPending} placeholder='274' type='number' />
-              <InputText name='chiffreAff' label="Chiffre d'affaire" form={form} isPending={isPending} placeholder='2 740 000' type='number' />
-              <InputText name='benefice' label='Bénéfices consolidé' form={form} isPending={isPending} placeholder='670 000' type='number' />
+              <InputText name='chiffreAff' label="Chiffre d'affaire en €" form={form} isPending={isPending} placeholder='2 740 000' type='number' />
+              <InputText name='benefice' label='Bénéfices consolidé en €' form={form} isPending={isPending} placeholder='670 000' type='number' />
               <InputText name='principale' label={null} form={form} isPending={isPending} placeholder={null} type='hidden' />
             </div>
             <Button disabled={isPending} type='submit' className='w-full'>
